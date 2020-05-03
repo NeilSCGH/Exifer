@@ -1,5 +1,4 @@
 *.bat
 *.pyc
 *.txt
-*.jpg
-*.mp4
+/test/*
