@@ -8,12 +8,17 @@ class program():
         self.setup(args)#process the arguments
 
     def setup(self,args):
-        if self.tool.argHasValue("-a"):
-          val = self.tool.argValue("-a")
-          self.a = val
+        #the folder for source files
+        if self.tool.argHasValue("-sf"):
+          val = self.tool.argValue("-sf")
+          self.sourceFolderPath = val.replace("\\","/")
+        else:
+          self.stop("Error, -sf (source folder) is missing !")
 
     def run(self):
-        print("Hey")
+        for root, dirs, files in os.walk(self.sourceFolderPath):
+            for filename in files:
+                print("File", root + "/" + filename)
         
     def stop(self, msg = ""):
         if msg != "": print(msg)
