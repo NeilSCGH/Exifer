@@ -1,6 +1,8 @@
 import sys
 import os
 from lib.tools import *
+from pymediainfo import MediaInfo
+import json
 
 class program():
     def __init__(self,args):
@@ -18,8 +20,35 @@ class program():
     def run(self):
         for root, dirs, files in os.walk(self.sourceFolderPath):
             for filename in files:
-                print("File", root + "/" + filename)
+                self.rename(root,filename)
         
+
+    def rename(self, root, file):
+        oldPath=root+"/"+file
+        extension="." + file.split(".")[-1]
+        
+        newName=self.getNewName(oldPath) + extension
+        newPath=root+"/"+newName
+
+        print("Renamed", newPath)
+        os.rename(oldPath, newPath)
+
+    def getNewName(self, file):
+        data=self.getDate(file)
+        year=data[:4]
+        month=data[5:7]
+        day=data[8:10]
+        hour=data[11:13]
+        minute=data[14:16]
+        second=data[17:19]
+
+        newName=year+month+day+"_"+hour+minute+second
+        return newName
+
+    def getDate(self,file):
+        media_info = MediaInfo.parse(file, output="JSON")
+        return(json.loads(media_info)["media"]["track"][0]["File_Modified_Date_Local"])
+
     def stop(self, msg = ""):
         if msg != "": print(msg)
         exit(0)#stop the program
