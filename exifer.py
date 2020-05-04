@@ -19,7 +19,7 @@ class program():
 
         self.keepName = self.tool.argExist("-kn")
         
-        self.extensionAllowed=[".jpg",".cr2",".mp4",".mts"]
+        self.extensionAllowed=[".jpg",".cr2",".mp4",".mts",".mov",".tif"]
 
     def run(self):
         for root, dirs, files in os.walk(self.sourceFolderPath):
@@ -30,13 +30,14 @@ class program():
     def rename(self, root, file):
         oldPath=root+"/"+file
         extension="." + file.split(".")[-1]
-        if extension.lower() in self.extensionAllowed:
+        extension=extension.lower()
+        if extension in self.extensionAllowed:
             
-            newName=self.getNewName(root,file) + extension
-            newPath=root+"/"+newName
-
-            print("Renaming {} -> {}".format(oldPath,newName))
             try:
+                newName=self.getNewName(root,file) + extension
+                newPath=root+"/"+newName
+
+                print("Renaming {} -> {}".format(oldPath,newName))
                 os.rename(oldPath, newPath)
             except:
                 print("Error with", file)
