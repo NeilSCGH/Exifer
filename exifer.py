@@ -10,12 +10,16 @@ class program():
         self.setup(args)#process the arguments
 
     def setup(self,args):
+        #Help
+        if self.tool.argExist("-h") or self.tool.argExist("-help"):
+          self.help()
+
         #the folder for source files
-        if self.tool.argHasValue("-sf"):
-          val = self.tool.argValue("-sf")
+        if self.tool.argHasValue("-f"):
+          val = self.tool.argValue("-f")
           self.sourceFolderPath = val.replace("\\","/")
         else:
-          self.stop("Error, -sf (source folder) is missing !")
+          self.stop("Error, -f (folder) is missing !")
 
         self.keepName = self.tool.argExist("-kn")
         
@@ -71,6 +75,17 @@ class program():
     def stop(self, msg = ""):
         if msg != "": print(msg)
         exit(0)#stop the program
+
+    def help(self):
+        print("")
+        print("Usage: python exifer.py -f folder [-kn]")
+        print("")
+        print("Options:")
+        print("    -f path         Path of the folder where the files to rename are")
+        print("    -kn             Keep the original name")
+        print("")
+        print("")
+        exit(0)
 
 if __name__ == '__main__':
     prog = program(sys.argv)
