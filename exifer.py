@@ -1,8 +1,8 @@
-import sys
-import os
+import sys, os, json
 from lib.tools import *
+
+tools.checkRequirements(["pymediainfo"])
 from pymediainfo import MediaInfo
-import json
 
 class program():
     def __init__(self,args):
