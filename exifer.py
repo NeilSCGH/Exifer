@@ -11,15 +11,17 @@ class program():
 
     def setup(self,args):
         #Help
-        if self.tool.argExist("-h") or self.tool.argExist("-help"):
-          self.help()
+        if self.tool.argExist("-h") or self.tool.argExist("-help") or self.tool.argExist("-?"):
+            self.help()
+            exit(0)
 
         #the folder for source files
         if self.tool.argHasValue("-f"):
           val = self.tool.argValue("-f")
           self.sourceFolderPath = val.replace("\\","/")
         else:
-          self.stop("Error, -f (folder) is missing !")
+            print("Error, -f is missing !")
+            exit(1)
 
         self.keepName = self.tool.argExist("-kn")
         
@@ -72,19 +74,16 @@ class program():
         media_info = MediaInfo.parse(file, output="JSON")
         return(json.loads(media_info)["media"]["track"][0]["File_Modified_Date_Local"])
 
-    def stop(self, msg = ""):
-        if msg != "": print(msg)
-        exit(0)#stop the program
-
     def help(self):
         print("")
-        print("Usage: python exifer.py -f folder [-kn]")
+        print("Usage: python exifer.py -f folderPath  [-kn]")
+        print("                        [[-h] | [-help] | [-?]]")
         print("")
         print("Options:")
-        print("    -f path         Path of the folder where the files to rename are")
-        print("    -kn             Keep the original name")
-        print("")
-        print("")
+        print("   -f folderPath  The program will rename all files in this forder (and all subfolders).")
+        print("                  Only files with the following extensions will be renamed:")
+        print("                   .jpg, .cr2, .mp4, .mts, .mov and .tif")
+        print("   -kn            (Optional) Keep the original name.")
         exit(0)
 
 if __name__ == '__main__':
