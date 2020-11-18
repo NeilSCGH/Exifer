@@ -25,8 +25,21 @@ class tools():
       return False
     return self.argExist(self.argValue(argName))
 
-  def tryToGetValue(self,argName,defaultValue):
-    if self.argHasValue(argName):
-      return self.argValue(argName)
-    else:
-      return defaultValue
+  def checkRequirements(required):
+    import sys
+    import subprocess
+    import pkg_resources
+
+    installed = [pkg.key for pkg in pkg_resources.working_set]
+    
+    python = sys.executable
+    for module in required:
+      if module not in installed:
+        print("Installing module: {} ".format(module), end="")
+        try:
+          subprocess.check_call([python, '-m', 'pip', 'install', module], stdout=subprocess.DEVNULL)
+        except:
+          print("Failed!")
+          print("Aborting...")
+          exit(1)
+        print("Done")
